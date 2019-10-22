@@ -24,20 +24,33 @@ const kittyPrompts = {
     
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.reduce((acc, kitten) => {
+      if (kitten.color === 'orange') {
+        acc.push(kitten.name)
+      }
+      return acc
+    }, [])
+      
     return result;
 
     // Annotation:
+    // Since we are returning an array of only the kitten's names whose color is orange, we
+    // will want to use the reduce method. By adding a conditional that pushes only the kittens whose
+    // color property is orange into the array we are filtering our results while also reducing to only
+    // the names of those kittens.
     // Write your annotation here as a comment
   },
 
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a,b) => b.age - a.age);
     return result;
 
     // Annotation:
+    // We are asked to sort the array based on age, and so we will use the sort method.
+    // The results are in ascending order so we amend our sort method by subtracting a's
+    // age from from b's.
     // Write your annotation here as a comment
   },
 
@@ -55,7 +68,9 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.map(kittens => {
+      return {name: kittens.name, age: kittens.age + 2, color: kittens.color};
+    });
     return result;
   }
 };
@@ -87,11 +102,22 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = clubs.reduce((acc, curVal) => {
+      curVal.members.forEach(teacher => {
+        if (acc[teacher]){
+          acc[teacher].push(curVal.club)
+        } else acc[teacher] = [curVal.club]
+      })
+      return acc
+    }, {});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Since we are returning an object we will want to use reduce. 
+    // In order to create the property names as each teacher, I use forEach, 
+    // to access the array of each current value of members, and then add conditional
+    // logic so that as we progress through the reduce method we can add to our already 
+    // existing prooperty name arrays and avoid any duplicates
   }
 };
 
@@ -123,10 +149,16 @@ const modPrompts = {
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = mods.map(element => {
+      return {mod: element.mod, studentsPerInstructor: (element.students / element.instructors)}
+    });
     return result;
-
     // Annotation:
+    // Since the result we are returning is in the same format as the starting array
+    // (an array of objects), we will want to use the map method as we can map a new array
+    // of objects that will still have our property of mod for each object index of the array,
+    // but also gives us the ability to write a new property of studentsPerInstructors based off the 
+    // value of the previous arrays properties of students and instructors. 
     // Write your annotation here as a comment
   }
 };
@@ -158,10 +190,16 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.map(element => {
+      return { flavor: element.cakeFlavor, inStock: element.inStock};
+    });
     return result;
 
     // Annotation:
+    // Since the returned result is in the same format (an array of objects) as 
+    // our dataset, the map method should be the best to use in this scenario. We return 
+    // an object that has a property name of flavor and set its value to the element.cakeFlavor, 
+    // and then add the inStock property and set its value to the element.inStock
     // Write your annotation here as a comment
   },
 
@@ -186,10 +224,12 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter(element => element.inStock > 0);
     return result;
 
     // Annotation:
+    // Since we are returning a shortened array of objects, we will want to use filter here.
+    // We will filter our results based on whose values of inStock are greater than 0.
     // Write your annotation here as a comment
   },
   
@@ -197,10 +237,13 @@ const cakePrompts = {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((acc, curVal) => acc + curVal.inStock, 0);
     return result;
 
     // Annotation:
+    // Since we are returning a sum amount of all the objects in the dataset reduce will be
+    // the most effective method. I assign an accumulator to the value of 0 and then add its value
+    // with each elements.inStock value.
     // Write your annotation here as a comment
   },
 
@@ -209,10 +252,19 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((acc, curVal) => {
+      curVal.toppings.forEach(element => {
+        if (!acc.includes(element)) {
+          acc.push(element);
+        }
+      });
+      return acc;
+    }, []);
     return result;
 
     // Annotation:
+    // Since we are returning an array but working with a dataset that is an array of objects, we could use
+    // map or reduce. I went with reduce here since I am also wanting to filter out my results of any duplicates.
     // Write your annotation here as a comment
   },
 
@@ -227,10 +279,23 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((acc, curVal) => {
+      curVal.toppings.forEach(element => {
+        if (acc[element]) {
+          acc[element] += 1;
+        } else acc[element] = 1;
+      })
+      return acc;
+    }, {});
     return result;
 
     // Annotation:
+    // Since I am returning an object but my dataset is an array of objects I am going to use
+    // reduce since I can change the datatype of my return result into the desired datatype. As I 
+    // access each object in my cakes array I am then going to run a forEach method on the array of 
+    // toppings for each object, set each topping as a property name for my accumulator object, and 
+    // then add conditional logic that says if this property name already exists then increase its value
+    // by one, otherwise create this property and set its value to one.
     // Write your annotation here as a comment
   }
 };
@@ -262,10 +327,14 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.filter(element => element.program === 'FE');
     return result;
 
     // Annotation:
+    // Since we are returning the same datatype (an array of objects) as we are initially working 
+    // with, but returning a filtered version that has less elements than the original, the best method
+    // to use would be filter. By only returning elements that have their .program values equal to 'FE'
+    // I am able to filter my results to only return the objects that are front end classrooms.
     // Write your annotation here as a comment
   },
 
@@ -277,7 +346,22 @@ const classPrompts = {
     //   beCapacity: 96
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.reduce((acc, curVal) => {
+      let feCapacity = 0;
+      let beCapacity = 0;
+      classrooms.forEach(element => {
+        if (element.program === 'FE') {
+          return feCapacity += element.capacity;
+        } else if (element.program === 'BE') {
+          return beCapacity += element.capacity;
+        }
+      });
+      acc.feCapacity = feCapacity;
+      acc.beCapacity = beCapacity;
+
+      return acc;
+
+    }, {});
     return result;
 
     // Annotation:
@@ -287,10 +371,14 @@ const classPrompts = {
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.sort((a, b) => a.capacity - b.capacity);
     return result;
 
     // Annotation:
+    // The prompt asks us to return the original array but sorted based on each objects capacity values, 
+    // so the sort method is the method to use to accomplish that. We will give it an a and b parameter, 
+    // each of which represents an index of the classrooms array. We then add .capacity to access each objects
+    // capacity values and then sort then based on whether the a or the b value is larger.
     // Write your annotation here as a comment
   }
 };
@@ -317,10 +405,13 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((acc, curVal) => acc + curVal.beers.length, 0);
     return result;
 
     // Annotation:
+    // Since we are doing some math and returning a sum of all the elements of the DataTransferItem, reduce is
+    // the best method for the job. I set the accumulator value to 0 and return  it plus the curVal.beers.length for
+    // each element.
     // Write your annotation here as a comment
   },
 
@@ -333,10 +424,15 @@ const breweryPrompts = {
     // ...etc.
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.map(brewery => {
+      return {name: brewery.name, beerCount: brewery.beers.length}
+    });
     return result;
 
     // Annotation:
+    // Since we are returning the same datatype that we are working with, and the number of indices will be the same
+    // we will want to use the map method. So as we go through each brewery object we return an object with a property of name
+    // set to the value of the brewery.name and another property of beerCount set to the value of the brewery.beers.length
     // Write your annotation here as a comment
   },
 
@@ -345,7 +441,18 @@ const breweryPrompts = {
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((acc, curVal) => {
+      let max = 0;
+      let beerObj = undefined;
+      curVal.beers.forEach(beer => {
+        if (beer.abv > max) {
+          max = beer.abv
+          beerObj = beer;
+        }
+      })
+      return acc = beerObj
+    });
+
     return result;
 
     // Annotation:
@@ -393,7 +500,10 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.map(teacher => {
+      let mapped = cohorts.map(element => element.studentCount);
+      return {name: teacher.name, studentCount: mapped[teacher.module - 1]};
+    });
     return result;
 
     // Annotation:
@@ -407,10 +517,25 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cohorts.reduce((acc, curVal) => {
+      let teachersNum = 0;
+      instructors.forEach(teacher => {
+        if (teacher.module === curVal.module) {
+          teachersNum += 1;
+        }
+      });
+      acc[`cohort${curVal.cohort}`] = (curVal.studentCount / teachersNum);
+      return acc;
+    }, {});
     return result;
 
     // Annotation:
+    // Since we are returning a singular object we want to start off using reduce.
+    // In order to create the key property names we interpolate the value of 
+    // curVal.cohort onto the cohort string. We then do a for each for the instructors
+    // dataset and for each match of curVal.module with the entirety of the instructors 
+    // dataset we can accumulate that number and assign it to a variable that we divide
+    // the curVal.studentCount by to get our students per instructors
     // Write your annotation here as a comment
   },
 
@@ -429,10 +554,31 @@ const turingPrompts = {
     //     Will: [1, 2, 3, 4]
     //   }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.reduce((acc, currentTeacher) => {
+      cohorts.forEach(cohort => {
+        cohort.curriculum.forEach(topic => {
+          if (currentTeacher.teaches.includes(topic)) {
+            if (acc[currentTeacher.name]) {
+              if(!acc[currentTeacher.name].includes(cohort.module)) {
+                acc[currentTeacher.name].push(cohort.module);
+              }
+            } else acc[currentTeacher.name] = [cohort.module];
+          }
+        });   
+      });
+      return acc;
+    }, {});
     return result;
 
     // Annotation:
+    // Since we are returning one large object we want to start off with reduce. We then use a nested
+    // forEach inside a forEach so that as we cycle through the cohorts array, we access the array of 
+    // curriculum for each cohort, and then for each topic check to see if it is included in our 
+    // currentTeacher.teaches array. We have add conditional logic where we first check to see if the 
+    // property name exists, if it does than we want to check if it does not already include the cohort.module,
+    // if it doesnt than push the value in, and if it does already exist in the array than do nothing. Finally
+    // if the property has not already been created, create it and assign it the value of an array for the
+    // cohort.module.
     // Write your annotation here as a comment
   },
 
@@ -446,10 +592,30 @@ const turingPrompts = {
     //   recursion: [ 'Pam', 'Leta' ]
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cohorts.reduce((acc, curVal) => {
+      instructors.forEach(teacher => {
+        curVal.curriculum.forEach(topic => {
+          if (teacher.teaches.includes(topic)) {
+            if(acc[topic]){
+              if(!acc[topic].includes(teacher.name)){
+                acc[topic].push(teacher.name);
+              }
+            } else acc[topic] = [teacher.name];
+          }
+        });
+      });
+      return acc;
+    }, {});
     return result;
 
     // Annotation:
+    // We want to return one large object so we will use reduce to start. We start on the cohorts
+    // dataset so that as we cycle through each curriculum topic we compare it to see if it is included
+    // in the instructors.teaches array for each instructors. We add conditional logic that says if this
+    // topic is inlcuded in the instructors.teaches array than check and see if this property exists, if it does 
+    // than check to see that this instructors.name is not already in this array, if it is not than push the name, 
+    // otherwise do nothing. If the property doesn't exist in the first place than create it and assign it the value
+    // of the teacher.name
     // Write your annotation here as a comment
   }
 };
@@ -481,10 +647,22 @@ const bossPrompts = {
     //   { bossName: 'Scar', sidekickLoyalty: 16 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = Object.values(bosses).map(boss => {
+      let loyaltyNum = 0;
+      sidekicks.forEach(sidekick => {
+        if (sidekick.boss === boss.name) {
+          loyaltyNum += sidekick.loyaltyToBoss;
+        }
+      });
+      return {bossName: boss.name, sidekickLoyalty: loyaltyNum};
+    });
     return result;
 
     // Annotation:
+    // In order to create a datatype of the correct size most easily, I start off with Object.keys of the bosses,
+    // then map that array and return an object for each index of the Object.keys array. Then I run a forEach loop
+    // inside of the that to find all the sidekicks that belong to that boss and accumulate their loyalty scores and 
+    // store that in a variable. Finally, return the object with the property keys and values.
     // Write your annotation here as a comment
   }
 };
@@ -523,10 +701,24 @@ const astronomyPrompts = {
     //     color: 'red' }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = stars.filter(star => {
+      let consties = Object.keys(constellations);
+      let starConst;
+      consties.forEach(constie => {
+        if (constellations[constie].stars.includes(star.name)) {
+          starConst = star;
+        }
+      });
+      return starConst;
+    });
     return result;
 
     // Annotation:
+    // I chose the filter method to solve this one since we are returning a shortened version of the 
+    // stars Array, limited to only those star objects that are present in any of the constellations. Next
+    // I create another array of the constellations object's keys, so that I can iterate over the constellation
+    // objects within. Using a forEach I am able to pass each key index and access the stars property which is an array,
+    // and check to see if it includes the name of the star object my filter method is current on.
     // Write your annotation here as a comment
   },
 
@@ -541,10 +733,18 @@ const astronomyPrompts = {
     //   red: [{obj}]
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = stars.reduce((acc, curVal) => {
+      if (!acc[curVal.color]) {
+        acc[curVal.color] = [curVal]
+      } else acc[curVal.color].push(curVal);
+      return acc;
+    }, {});
     return result;
 
     // Annotation:
+    // Not working with the other dataset for this one, and since I am returning one large object I will 
+    // use reduce. I first check to see if the property name has already been created, if not then create the property
+    // key name and assign it the value of the curVal. If it does already exist than push the curVal into the array.
     // Write your annotation here as a comment
   },
 
@@ -563,10 +763,17 @@ const astronomyPrompts = {
     //    "The Little Dipper" ]
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = stars.sort((a, b) => a.visualMagnitude - b.visualMagnitude).reduce((acc, curVal) => {
+      if (curVal.constellation === '') {
+      } else acc.push(curVal.constellation);
+      return acc;
+    }, []);
     return result;
 
     // Annotation:
+    // Use reduce to be able to return an array of all the constellation names in the star array, but
+    // with the added capacity of being able to filter the results to not include the empty string. To get the
+    // constellations in the correct order based on their luminosity I run a sort method on the array before I begin.
     // Write your annotation here as a comment
   }
 };
@@ -594,19 +801,33 @@ const ultimaPrompts = {
     // Return the sum of the amount of damage for all the weapons that our characters can use
     // Answer => 113
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = characters.reduce((acc, curVal) => {
+      curVal.weapons.forEach(weapon => acc += weapons[weapon].damage);
+      return acc;
+    }, 0);
     return result;
 
     // Annotation:
     // Write your annotation here as a comment
   },
-
   charactersByTotal() {
 
     // Return the sum damage and total range for each character as an object. 
     // ex: [ { Avatar: { damage: 27, range: 24 }, { Iolo: {...}, ...}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = characters.reduce((acc, character) => {
+      let damagesum = 0;
+      let rangesum = 0;
+      let boob = character.name;
+      let obj = character.weapons.reduce((acc, weapon) => {
+        damagesum += weapons[weapon].damage;
+        rangesum += weapons[weapon].range;
+        acc[boob] = {damage: damagesum, range: rangesum};
+        return acc;
+      }, {});
+      acc.push(obj);
+      return acc;
+    }, []);
     return result;
 
     // Annotation:
@@ -643,7 +864,16 @@ const dinosaurPrompts = {
     //   'Jurassic World: Fallen Kingdom': 18
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((acc, curVal) => {
+      let dinoArr = [];
+      curVal.dinos.forEach(dino => {
+        if (dinosaurs[dino].isAwesome){
+          dinoArr.push(dino);
+        }
+      });
+      acc[curVal.title] = (dinoArr.length);
+      return acc;
+    },{});
     return result;
 
     // Annotation:
@@ -676,8 +906,24 @@ const dinosaurPrompts = {
       }
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((acc, curVal) => {
+      let age = curVal.cast.reduce((acc, cast) => {
+        return acc += (curVal.yearReleased - humans[cast].yearBorn);
+      }, 0) / curVal.cast.length;
+      if (!acc[curVal.director]) {
+        let obj = {};
+        obj[curVal.title] = Math.floor(age);
+        acc[curVal.director] = obj;
+      } else {
+        let obj = {};
+        obj[curVal.title] = Math.floor(age);
+        Object.assign(acc[curVal.director], obj);
+      }
+      return acc;
+    }, {});
+
     return result;
+
 
     // Annotation:
     // Write your annotation here as a comment
@@ -709,7 +955,23 @@ const dinosaurPrompts = {
       }]
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result =  Object.keys(humans).reduce((acc, actor) => {
+      let mar = movies.flatMap(poop => poop.cast);
+      if (!mar.includes(actor)) {
+        let obj = {name: actor, nationality: humans[actor].nationality, imdbStarMeterRating: humans[actor].imdbStarMeterRating};
+        acc.push(obj);
+      }
+      return acc;
+    }, []).sort((a, b) => {
+      if ( a.nationality < b.nationality ){
+        return -1;
+      }
+      if ( a.natinoality > b.nationality ){
+        return 1;
+      }
+      return 0;
+    });
+    
     return result;
 
     // Annotation:
@@ -732,7 +994,20 @@ const dinosaurPrompts = {
       { name: 'Bryce Dallas Howard', ages: [ 34, 37 ] } ]
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = Object.keys(humans).reduce((acc, curVal) => {
+      let ageArr = [];
+      movies.forEach(movie => {
+        if (movie.cast.includes(curVal)) {
+          age = movie.yearReleased - humans[curVal].yearBorn;
+          ageArr.push(age);
+        }
+      });
+      if (ageArr.length > 0) {
+        acc.push({name: curVal, ages: ageArr});
+      }
+      return acc;
+    }, []);
+
     return result;
 
     // Annotation:
